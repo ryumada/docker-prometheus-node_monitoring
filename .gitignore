@@ -1,0 +1,7 @@
+# prometheus data
+prometheus/data/*
+!prometheus/data/.prometheus-data-will-be-written-here
+
+# node_exporter data
+node_exporter/data/*
+!node_exporter/data/.node_exporter-data-will-be-written-here

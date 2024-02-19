@@ -1,0 +1,34 @@
+version: "0.0.1"
+
+networks:
+  prometheus:
+
+service:
+  prometheus:
+    image: quay.io/repository/prometheus/prometheus:v2.45.3
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus.rules.yml:/etc/prometheus/prometheus.rules.yml
+      - ./prometheus/data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+    ports:
+      - 9090:9090
+    networks:
+      - prometheus
+    restart: unless-stopped
+  node-exporter:
+    image: quay.io/prometheus/node-exporter:v1.7.0
+    container_name: node-exporter
+    volumes:
+      - "/:/host:ro,rslave"
+    command:
+      - "--path.rootfs=/host"
+    ports:
+      - 9100:9100
+    networks:
+      - prometheus
+    restart: unless-stopped
+    pid: host
